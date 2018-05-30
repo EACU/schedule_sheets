@@ -1,58 +1,92 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>EACA API</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
-  </head>
-  <body>
-  <section class="section">
-    <div class="container">
+    <head>
+    {% block head %}
+
+        {% block meta %} 
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+       
+        {% endblock %}
+
+        <title>{% block title %}EACA API{% endblock %}</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+        <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+        <style>
+            .icon{
+                color: black;
+            }
+            .icon:hover{
+                color: black
+            }
+            </style>
+    {% endblock %}
+    </head>
+    <body class="{% block bodyclass %}{% endblock %} container">
+
+{% block hello %}
+<section class="hero">
+    <div class="hero-body">
+      <div class="container">
       <h1 class="title">
-        API для Расписания ЕАСИ
+        API для Расписания ЕАСИ  <a class="icon" href="https://github.com/Belvedersky/schedule_sheets"><i class="fab fa-github fa-sm">  </i></a>
+
+
       </h1>
       <p class="subtitle">
-        <a href="https://docs.google.com/spreadsheets/d/1bcSQ__8xK1C4HF6qW_gqVbYFRyy7dTVNm6jT-9Z_ZFc/edit?usp=sharing">Таблица</a> <br/>
-        <a href={{ url_for('info') }}>Информация о текущей неделе</a> 
+        <a href="https://docs.google.com/spreadsheets/d/1bcSQ__8xK1C4HF6qW_gqVbYFRyy7dTVNm6jT-9Z_ZFc/edit?usp=sharing">Таблица </a> <br/>
+        <a href={{ url_for('info') }}>Информация о текущей неделе </a> 
       </p>
-      <p>
-          Для навигации используйте путь<code>/getData/Курс/Профиль</code> <br />
-          Курс <code>1,2,3,4</code> <br />
-          Профили <code> 1 -Управление 2 -Журналистика 3 - Визуалы 4-Танцоры 5- Информатика</code>
+      <p> 
+          Для навигации используйте путь :<code>/getData/Курс/Профиль</code>
+           <br>
+          Запрос :<code>curl -X GET scheduleeacu.appspot.com/getData/Курс/Профиль </code>
+          <br />
+
+          Курсы: 1,2,3,4
+          <br />
+          Профили: 
+            <ul>1 - Управление</ul> 
+            <ul>2 - Журналистика</ul>
+            <ul>3 - Визуалы</ul> 
+            <ul>4 - Танцоры</ul>
+            <ul>5 - Информатика</ul> 
           <br />
       </p>
-      <h4> Визуальные коммуникации</h1>
-       
+      <br />
 
+
+      <h4> Визуальные коммуникации</h4>
         <a href = {{ url_for('schedule',course = 1, group = 3) }}>123</a> /
         <a href = {{ url_for('schedule',course = 2, group = 3) }}>223</a> /
         <a href = {{ url_for('schedule',course = 3, group = 3) }}>323</a> /
         <a href = {{ url_for('schedule',course = 4, group = 3) }}>424</a> /
 
-        <h4> Технологии управления в сфере культуры</h1>
+      <h4> Технологии управления в сфере культуры</h4>
             <a href = {{ url_for('schedule',course = 1, group = 1) }}>121</a> /
             <a href = {{ url_for('schedule',course = 2, group = 1) }}>221</a> /
             <a href = {{ url_for('schedule',course = 3, group = 1) }}>321</a> /
             <a href = {{ url_for('schedule',course = 4, group = 1) }}>421</a> /
 
-      <h4> Журналистика в области культуры</h1>
+      <h4> Журналистика в области культуры</h4>
     <a href = {{ url_for('schedule',course = 1, group = 2) }}>122</a> /
     <a href = {{ url_for('schedule',course = 2, group = 2) }}>222</a> /
     <a href = {{ url_for('schedule',course = 3, group = 2) }}>322</a> /
     <a href = {{ url_for('schedule',course = 4, group = 2) }}>422</a> /
-    <h4> Журналистика в области культуры</h1>
+    <h4> Журналистика в области культуры</h4>
         <a href = {{ url_for('schedule',course = 1, group = 4) }}>124</a> /
         <a href = {{ url_for('schedule',course = 2, group = 4) }}>224</a> /
         <a href = {{ url_for('schedule',course = 3, group = 4) }}>324</a> /
-      <h4> Прикладная информатика</h1>
+      <h4> Прикладная информатика</h4>
       <a href = {{ url_for('schedule',course = 1, group = 5) }}>125</a> /
       <a href = {{ url_for('schedule',course = 2, group = 5) }}>225</a> /
       <a href = {{ url_for('schedule',course = 3, group = 5) }}>325</a> /
       <a href = {{ url_for('schedule',course = 4, group = 5) }}>425</a> /
     </div>
-  </section>
-  </body>
-</html>
-        
+  </div>
+</section>
+
+    {% endblock %}
+
+  </body >
+ </html>

@@ -3,15 +3,23 @@
     <head>
     {% block head %}
 
-        {% block meta %}
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <meta name="robots" content="NONE,NOARCHIVE" />
+        {% block meta %} 
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+       
         {% endblock %}
 
-        <title>{% block title %}EACA {% endblock %}</title>
+        <title>{% block title %}EACA API{% endblock %}</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
         <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
-
+        <style>
+        .icon{
+            color: black;
+        }
+        .icon:hover{
+            color: black
+        }
+        </style>
     {% endblock %}
     </head>
 
@@ -53,7 +61,7 @@
 
         <div class="content-main">
             <div class="page-header"> 
-                <a href={{ url_for('main') }}>
+                <a class="icon" href={{ url_for('main') }}>
                         <i class="fas fa-arrow-left fa-2x"></i>
                 </a>
             
@@ -135,4 +143,5 @@
     <script src="{{url_for('flask-api.static', filename='js/default.js')}}"></script>
     {% endblock %}
   </body>
+
 </html>

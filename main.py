@@ -1,6 +1,6 @@
 import logging
 import datetime
-import pygsheets 
+import pygsheets
 from flask import Blueprint,render_template, abort
 from jinja2 import TemplateNotFound
 from flask_api import FlaskAPI
@@ -51,6 +51,7 @@ def schedule(course,group):
     table = f"{course}20({evenOdd})"
     wks = sh.worksheet('title',table)
     def courses(courses):
+        # Один поток заполняет шесть дней
         week = {}
         daylesson  = { 4:9, 13:18, 22:27, 31:36, 40:45, 49:54 }
         day = 0
@@ -60,6 +61,7 @@ def schedule(course,group):
             day = day+1
         return week
     
+
     return  courses(department[group])
 
 @app.errorhandler(500)
