@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    {% block head %}
+
+        {% block meta %}
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="robots" content="NONE,NOARCHIVE" />
+        {% endblock %}
+
+        <title>{% block title %}EACA {% endblock %}</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+        <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+
+    {% endblock %}
+    </head>
+
+  <body class="{% block bodyclass %}{% endblock %} container">
+        <section class="section">
+                <div class="container">
+    <!--
+    {% block breadcrumbs %}
+    <ul class="breadcrumb">
+        {% for breadcrumb_name, breadcrumb_url in breadcrumblist %}
+            <li>
+                <a href="{{ breadcrumb_url }}" {% if forloop.last %}class="active"{% endif %}>{{ breadcrumb_name }}</a> {% if not forloop.last %}<span class="divider">&rsaquo;</span>{% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+    {% endblock %}
+    -->
+    <div style="height: 50px"></div>
+
+    <!-- Content -->
+    <div id="content">
+
+
+        <!--{% if 'OPTIONS' in allowed_methods %}
+            <form class="button-form" action="{{ request.url }}" method="POST" class="pull-right">
+                <- csrf_token ->
+                <input type="hidden" name="_method" value="OPTIONS" />
+                <button class="btn btn-primary js-tooltip" title="Make an OPTIONS request on the resource">OPTIONS</button>
+            </form>
+        {% endif %}-->
+
+        {% if 'DELETE' in allowed_methods %}
+            <form class="button-form" action="{{ request.url }}" method="POST" class="pull-right">
+                <!-- csrf_token -->
+                <input type="hidden" name="_method" value="DELETE" />
+                <button class="btn btn-danger js-tooltip" title="Make a DELETE request on the resource">DELETE</button>
+            </form>
+        {% endif %}
+
+        <div class="content-main">
+            <div class="page-header"> 
+                <a href={{ url_for('main') }}>
+                        <i class="fas fa-arrow-left fa-2x"></i>
+                </a>
+            
+                <h1 class="title">{{ view_name }}</h1></div>
+                <br />
+            {% if view_description %}<div style="margin-top: -10px; margin-bottom: 10px">{{ view_description|safe }}</div>{% endif %}
+            <div class="request-info" style="clear: both" >
+                <pre class="prettyprint"><b>{{ request.method }}</b> {{ request.url }}</pre>
+            </div>
+            <div class="response-info">
+                <pre class="prettyprint"><div class="meta nocode"><b>HTTP {{ status }}</b>{% autoescape off %}
+{% for key, val in headers.items() %}<b>{{ key }}:</b> <span class="lit">{{ val|e }}<!--{ val|break_long_headers|urlize_quoted_links }--></span>
+{% endfor %}
+</div>{% if content %}{{ content|urlize_quoted_links }}{% endif %}<!-- |urlize_quoted_links --></pre>{% endautoescape %}
+            </div>
+        </div>
+
+
+                {% if 'POST' in allowed_methods or 'PUT' in allowed_methods or 'PATCH' in allowed_methods %}
+                <div>
+                    <div class="well">
+                        <div id="generic-content-form">
+                            <form action="{{ request.url }}" method="POST" class="form-horizontal">
+                                <fieldset>
+<div class="control-group">
+        <label for="id__content_type" class="control-label">Media type:</label>
+        <div class="controls">
+            <select id="id__content_type" name="_content_type">
+<option value="application/json" selected="selected">application/json</option>
+<option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
+<option value="multipart/form-data">multipart/form-data</option>
+</select>
+            <span class="help-block"></span>
+        </div>
+    </div>
+                                <div class="control-group">
+                                    <label for="id__content" class="control-label">Content:</label>
+                                    <div class="controls">
+                                        <textarea name="_content" cols="40" rows="10"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    {% if 'POST' in allowed_methods %}
+                                    <button class="btn btn-primary" title="Make a POST request on the resource">POST</button>
+                                    {% endif %}
+                                    {% if 'PUT' in allowed_methods %}
+                                    <button class="btn btn-primary js-tooltip" name="_method" value="PUT" title="Make a PUT request on the resource">PUT</button>
+                                    {% endif %}
+                                    {% if 'PATCH' in allowed_methods %}
+                                    <button class="btn btn-primary js-tooltip" name="_method" value="PATCH" title="Make a PATCH request on the resource">PATCH</button>
+                                    {% endif %}
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+        </div>
+        <!-- END content-main -->
+
+    </div>
+    <!-- END Content -->
+
+        <div id="push"></div>
+
+    </div>
+
+    </div><!-- ./wrapper -->
+    </section>
+    {% block footer %}
+    {% endblock %}
+
+    {% block script %}
+    <script src="{{url_for('flask-api.static', filename='js/jquery-1.8.1-min.js')}}"></script>
+    <script src="{{url_for('flask-api.static', filename='js/bootstrap.min.js')}}"></script>
+    <script src="{{url_for('flask-api.static', filename='js/prettify-min.js')}}"></script>
+    <script src="{{url_for('flask-api.static', filename='js/default.js')}}"></script>
+    {% endblock %}
+  </body>
+</html>
