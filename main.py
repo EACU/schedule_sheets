@@ -6,13 +6,22 @@ from flask import Blueprint,render_template, abort
 from jinja2 import TemplateNotFound
 from flask_api import FlaskAPI
 import json
+from flask_cors import CORS
 theme = Blueprint(
     'flask-api', __name__,
     url_prefix='/flask-api',
     template_folder='templates', static_folder='static'
 )
 
+
 app = FlaskAPI(__name__)
+cors = CORS(app, resources={r"/getData/*": {"origins": "*"}})
+
+app.config['DEFAULT_PARSERS'] = [
+    'flask.ext.api.parsers.JSONParser',
+    'flask.ext.api.parsers.URLEncodedParser',
+    'flask.ext.api.parsers.MultiPartParser'
+]
 app.blueprints['flask-api'] = theme
 
 
@@ -48,6 +57,9 @@ def info():
 @app.route('/getData/<int:course>/<int:dept>', methods=['GET'])
 def schedule(course,dept):
     table = f"{course}20({evenOdd})"
+    f"""
+    Расписание группы {table}
+    """
     wks = sh.worksheet('title',table)
     start = f"{department[dept]}54"
     end = f"{department[dept]}4"
@@ -78,5 +90,5 @@ def server_error(e):
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8088,debug=True)
+    app.run(host='127.0.0.1', port=8088)
 
