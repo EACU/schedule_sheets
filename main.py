@@ -1,5 +1,6 @@
 import logging
 import datetime
+import pytz
 import pygsheets
 import sqlite3
 from flask import Blueprint,render_template, abort
@@ -7,6 +8,7 @@ from jinja2 import TemplateNotFound
 from flask_api import FlaskAPI
 import json
 from flask_cors import CORS
+
 theme = Blueprint(
     'flask-api', __name__,
     url_prefix='/flask-api',
@@ -30,8 +32,10 @@ app.blueprints['flask-api'] = theme
 def main():
  return render_template ('hello.html')
 
-dayname    = ['Понедельник','Вторник','Cреда','Четверг','Пятница','Cуббота']
+dayname    = ['Monday','Tuesday','Wednesday','Thursday','Friday','saturday','Sunday']
 department = { 1:"D", 2:"E", 3:"F", 4:"G", 5:"H" }
+lessons = ["9:00 - 10:35", "10:45 - 12:20", "13:00 - 14:35", "14:45 - 16:20", "16:30 - 18:05", "18:15 - 19:50"]
+now = datetime.datetime.now()
 nowWeek = datetime.datetime.today().isocalendar()[1]
 evenOdd = ''
 if (nowWeek % 2==0):
@@ -42,14 +46,16 @@ gc = pygsheets.authorize(service_file='service_creds.json')
 sh = gc.open('ScheduleInformatics')
 
 
-@app.route('/Info', methods=['GET'])
+@app.route('/getData/Info', methods=['GET'])
 def info():
     """
     Информация о дне и неделе 
     """
     infoDay ={
-        "Четность" : evenOdd,
-        "Cегодня" : dayname[datetime.datetime.today().weekday()] }
+        "parity" : evenOdd,
+        "UTC" : datetime.datetime.now(tz=pytz.utc).isoformat(),
+        "timeNow" : f"{now.hour}:{now.minute}" ,
+        "today" : dayname[datetime.datetime.today().weekday()] }
     return infoDay
 
 
@@ -63,21 +69,22 @@ def schedule(course,dept):
     wks = sh.worksheet('title',table)
     start = f"{department[dept]}54"
     end = f"{department[dept]}4"
-    week = wks.get_values(start, end, returnas='matrix', majdim='ROWS', value_render='FORMATTED_VALUE')
-    return {"Неделя сейчас" :evenOdd,
-            "Cегодня" : dayname[datetime.datetime.today().weekday()],
-            dayname[0]: week[0:6],
-            dayname[1]: week[9:15],
-            dayname[2]: week[18:24],
-            dayname[3]: week[27:33],
-            dayname[4]: week[36:42],
-            dayname[5]: week[45:51],}
+    week = wks.get_values(start, end, returnas='matrix', majdim='ROWS', value_render='UNFORMATTED_VALUE')
+    return { "parity" : evenOdd,
+             "timeNow" : f"{now.hour}:{now.minute}" ,
+             "today" : dayname[datetime.datetime.today().weekday()],
+                dayname[0]: dict(zip(lessons,week[0:6])),
+                dayname[1]: dict(zip(lessons,week[9:15])),
+                dayname[2]: dict(zip(lessons,week[18:24])),
+                dayname[3]: dict(zip(lessons,week[27:33])),
+                dayname[4]: dict(zip(lessons,week[36:42])),
+                dayname[5]: dict(zip(lessons,week[45:51]))}
 
-conn = sqlite3.connect('Schedule.sqlite')
-cursor = conn.cursor()
+# conn = sqlite3.connect('Schedule.sqlite')
+# cursor = conn.cursor()
 
 
-conn.close()
+# conn.close()
 
 
 @app.errorhandler(500)
