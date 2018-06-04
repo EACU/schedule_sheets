@@ -32,9 +32,9 @@ app.blueprints['flask-api'] = theme
 def main():
  return render_template ('hello.html')
 
-dayname    = ['Monday','Tuesday','Wednesday','Thursday','Friday','saturday','Sunday']
+dayname    = ['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье']
 department = { 1:"D", 2:"E", 3:"F", 4:"G", 5:"H" }
-lessons = ["9:00 - 10:35", "10:45 - 12:20", "13:00 - 14:35", "14:45 - 16:20", "16:30 - 18:05", "18:15 - 19:50"]
+lessons    = ["1", "2", "3", "4", "5", "6"]
 now = datetime.datetime.now()
 nowWeek = datetime.datetime.today().isocalendar()[1]
 evenOdd = ''
@@ -70,7 +70,8 @@ def schedule(course,dept):
     start = f"{department[dept]}54"
     end = f"{department[dept]}4"
     week = wks.get_values(start, end, returnas='matrix', majdim='ROWS', value_render='UNFORMATTED_VALUE')
-    return { "parity" : evenOdd,
+    return { "group" : f"{course}2{dept}",
+             "parity" : evenOdd,
              "timeNow" : f"{now.hour}:{now.minute}" ,
              "today" : dayname[datetime.datetime.today().weekday()],
                 dayname[0]: dict(zip(lessons,week[0:6])),
