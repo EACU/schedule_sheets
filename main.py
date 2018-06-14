@@ -32,9 +32,10 @@ app.blueprints['flask-api'] = theme
 def main():
  return render_template ('hello.html')
 
-dayname    = ['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье']
+dayname = ['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье']
+
 department = { 1:"D", 2:"E", 3:"F", 4:"G", 5:"H" }
-lessons    = ["1", "2", "3", "4", "5", "6"]
+timelessons = ["9:00 - 10:35", "10:45 - 12:20","14:45 - 16:20","16:30 - 18:05","18:15 - 19:50" ]
 now = datetime.datetime.now()
 nowWeek = datetime.datetime.today().isocalendar()[1]
 evenOdd = ''
@@ -53,9 +54,14 @@ def info():
     """
     infoDay ={
         "parity" : evenOdd,
-        "UTC" : datetime.datetime.now(tz=pytz.utc).isoformat(),
-        "timeNow" : f"{now.hour}:{now.minute}" ,
-        "today" : dayname[datetime.datetime.today().weekday()] }
+        "today" : dayname[datetime.datetime.today().weekday()],
+        "weekdays" : dayname
+        # "Визуальные коммуникации" : ["123", "223" , "323", "423"],
+        # "Технологии управления в сфере культуры" : ["121", "221" , "321", "421"],
+        # "Журналистика в области культуры" : ["122", "222" , "322", "422"],
+        # "Танец и современная пластическая культура" : ["124", "224" , "324"],
+        # "Прикладная информатика в социально-культурной сфере" : ["125", "225" , "325", "425"]
+         }
     return infoDay
 
 
@@ -72,21 +78,16 @@ def schedule(course,dept):
     week = wks.get_values(start, end, returnas='matrix', majdim='ROWS', value_render='UNFORMATTED_VALUE')
     return { "group" : f"{course}2{dept}",
              "parity" : evenOdd,
-             "timeNow" : f"{now.hour}:{now.minute}" ,
              "today" : dayname[datetime.datetime.today().weekday()],
-                dayname[0]: dict(zip(lessons,week[0:6])),
-                dayname[1]: dict(zip(lessons,week[9:15])),
-                dayname[2]: dict(zip(lessons,week[18:24])),
-                dayname[3]: dict(zip(lessons,week[27:33])),
-                dayname[4]: dict(zip(lessons,week[36:42])),
-                dayname[5]: dict(zip(lessons,week[45:51]))}
-
-# conn = sqlite3.connect('Schedule.sqlite')
-# cursor = conn.cursor()
-
-
-# conn.close()
-
+             "week" : { 
+                dayname[0]: dict(zip(timelessons,week[0:6])),
+                dayname[1]: dict(zip(timelessons,week[9:15])),
+                dayname[2]: dict(zip(timelessons,week[18:24])),
+                dayname[3]: dict(zip(timelessons,week[27:33])),
+                dayname[4]: dict(zip(timelessons,week[36:42])),
+                dayname[5]: dict(zip(timelessons,week[45:51]))}
+            }
+            
 
 @app.errorhandler(500)
 def server_error(e):
