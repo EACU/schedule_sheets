@@ -76,19 +76,19 @@ def schedule(course,dept):
     start = f"{department[dept]}54"
     end = f"{department[dept]}4"
     week = wks.get_values(start, end, returnas='matrix', majdim='ROWS', value_render='UNFORMATTED_VALUE')
-    return { "group" : f"{course}2{dept}",
-             "parity" : evenOdd,
-             "today" : dayname[datetime.datetime.today().weekday()],
-             "week" : { 
-                dayname[0]: dict(zip(timelessons,week[0:6])),
-                dayname[1]: dict(zip(timelessons,week[9:15])),
-                dayname[2]: dict(zip(timelessons,week[18:24])),
-                dayname[3]: dict(zip(timelessons,week[27:33])),
-                dayname[4]: dict(zip(timelessons,week[36:42])),
-                dayname[5]: dict(zip(timelessons,week[45:51]))}
-            }
+    jsonfile = { "group" : f"{course}2{dept}",
+                 "parity" : evenOdd,
+                 "today" : dayname[datetime.datetime.today().weekday()],
+                 "week" : { 
+                    dayname[0]: dict(zip(timelessons,week[0:6])),
+                    dayname[1]: dict(zip(timelessons,week[9:15])),
+                    dayname[2]: dict(zip(timelessons,week[18:24])),
+                    dayname[3]: dict(zip(timelessons,week[27:33])),
+                    dayname[4]: dict(zip(timelessons,week[36:42])),
+                    dayname[5]: dict(zip(timelessons,week[45:51]))}
+                }
+    return jsonfile
             
-
 @app.errorhandler(500)
 def server_error(e):
     logging.exception('An error occurred during a request.')
@@ -99,5 +99,5 @@ def server_error(e):
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8088)
+    app.run(host='127.0.0.1', port=8088, debug=True)
 
