@@ -6,7 +6,7 @@ Use [flask-api](https://github.com/flask-api/flask-api) and [pygsheets](https://
 
 [Quickstart for Python in the App Engine](https://cloud.google.com/appengine/docs/flexible/python/quickstart)
  and
-[Authorizing pygsheets](http://pygsheets.readthedocs.io/en/latest/authorizing.html)
+[Authorizing pygsheets](https://pygsheets.readthedocs.io/en/latest/authorization.html)
 
 
 ```
